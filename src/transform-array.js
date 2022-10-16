@@ -13,11 +13,53 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function transform(arr) {
+
+  if (!Array.isArray(arr)) {
+      throw new Error("'arr' parameter must be an instance of the Array!")
+  }
+
+  const newArr = arr.slice();
+  const conditions = ['--discard-next', '--discard-prev', '--double-next', '--double-prev']
+
+  for (let i = 0; i < newArr.length; i++) {
+
+    if (newArr[i] === conditions[0] && newArr[i + 2] === conditions[1] || 
+      newArr[i] === conditions[0] && newArr[i + 2] === conditions[3]) {
+      newArr.splice(i, 3)
+    }
+    
+    if (newArr[i] === conditions[2] && newArr[i + 2] === conditions[3]) {
+      newArr.splice(i, 3,newArr[i + 1], newArr[i + 1], newArr[i + 1])
+    }
+
+    if(newArr[i] === conditions[0]) {
+      i === newArr.length - 1 ? newArr.splice(i, 1) : newArr.splice(i, 2)
+    }
+
+    if((newArr[i] === conditions[1])) {
+      i === 0 ? newArr.splice(i, 1) : newArr.splice(i-1, 2)
+    }
+
+    if(newArr[i] === conditions[2]) {
+      i === newArr.length - 1 ? newArr.splice(i, 1) : newArr.splice(i, 1, newArr[i + 1])
+    } 
+    
+    if((newArr[i] === conditions[3])) {
+      i === 0 ? newArr.splice(i, 1) : newArr.splice(i, 1, i-1)
+    }
+
+    if (newArr[i] === conditions[0] && newArr[i + 2] === conditions[1] || newArr[i] === conditions[1] && newArr[i + 2] === conditions[3]) {
+      newArr.splice(i, 3)
+    }
+
+
+  }
+
+return newArr;
 }
 
 module.exports = {
   transform
 };
+ 
